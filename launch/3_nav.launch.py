@@ -31,7 +31,10 @@ def generate_launch_description():
             executable='bt_navigator',
             name='bt_navigator',
             output='screen',
-            parameters=[f'{nav2_mr_sim_dir}/configs/nav2_params.yaml'],
+            parameters=[
+                f'{nav2_mr_sim_dir}/configs/nav2_params.yaml',
+                {'default_bt_xml_filename': f'{nav2_mr_sim_dir}/configs/simp_bt.xml'}
+            ],
             env={'RCL_LOG_LEVEL': 'debug'}  # Set log level to debug for detailed output
         ),
 

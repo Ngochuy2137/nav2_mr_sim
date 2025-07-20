@@ -1,6 +1,7 @@
 import os
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, ExecuteProcess
+from launch.actions import DeclareLaunchArgument, ExecuteProcess, IncludeLaunchDescription
+from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
 from ament_index_python.packages import get_package_share_directory
@@ -9,11 +10,12 @@ nav2_mr_sim_dir = os.environ.get('NAV2_MR_SIM_DIR')
 
 def generate_launch_description():
     # File paths
+    
     urdf_file_path = f'{nav2_mr_sim_dir}/urdf/diff_robot.urdf'
     rviz_config_file_path = f'{nav2_mr_sim_dir}/urdf/rviz.rviz'
-    slam_params_file_path = f'{nav2_mr_sim_dir}/map/slam_params.yaml'
-    world_file_path = f'{nav2_mr_sim_dir}/world/silverstone_track.world'
-    controller_config_file_path = f'{nav2_mr_sim_dir}/control/diff_drive_controller.yaml'
+    # world_file_path = f'{nav2_mr_sim_dir}/worlds/monza_track.world'
+    world_file_path = f'{nav2_mr_sim_dir}/worlds/turtlebot3_world.world'
+    controller_config_file_path = f'{nav2_mr_sim_dir}/configs/diff_drive_controller.yaml'
     map_file = f'{nav2_mr_sim_dir}/src/my_map.yaml'
 
     # Load robot description from URDF file
@@ -48,9 +50,20 @@ def generate_launch_description():
             name='Y', default_value='-0.062120', description='Initial yaw orientation of the robot'),
 
         # Gazebo launch
-        ExecuteProcess(
-            cmd=['gazebo', '--verbose', '-s', 'libgazebo_ros_factory.so', LaunchConfiguration('world')],
-            output='screen'),
+        # ExecuteProcess(
+        #     cmd=['gazebo', '--verbose', '-s', 'libgazebo_ros_factory.so', LaunchConfiguration('world')],
+        #     output='screen'),
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(
+                os.path.join(
+                    get_package_share_directory('gazebo_ros'),
+                    'launch',
+                    'gazebo.launch.py'
+                )
+            ),
+            launch_arguments={'world': world_file_path}.items()
+        ),
+
 
         # Spawn the robot in Gazebo
         Node(package='gazebo_ros', executable='spawn_entity.py',
@@ -68,14 +81,17 @@ def generate_launch_description():
         # Publish the robot state (robot_description topic)
         Node(package='robot_state_publisher', executable='robot_state_publisher',
              output='screen',
-             parameters=[{'robot_description': robot_desc}],
+             parameters=[{'robot_description': robot_desc, 'use_sim_time': True}],
              remappings=[("/diff_drive_controller/cmd_vel_unstamped", "/cmd_vel")]),
+            
+        Node(
+            package='tf2_ros',
+            executable='static_transform_publisher',
+            name='static_tf_lidar',
+            arguments=['0', '0', '0.15', '0', '0', '0', 'base_link', 'base_scan'],
+            output='screen'
+        ),
 
-        # Launch RViz
-        Node(package='rviz2', executable='rviz2',
-             name='rviz2',
-             output='screen',
-             arguments=['-d', LaunchConfiguration('rvizconfig')]),
 
         # Start the controller manager and load controller configurations
         Node(package='controller_manager', executable='ros2_control_node',
@@ -85,4 +101,10 @@ def generate_launch_description():
                  {'robot_description': robot_desc},  # Robot description from robot_state_publisher
                  controller_config_file_path  # Path to controller YAML
              ]),
+
+        # Launch RViz
+        Node(package='rviz2', executable='rviz2',
+             name='rviz2',
+             output='screen',
+             arguments=['-d', LaunchConfiguration('rvizconfig')]),
     ])
