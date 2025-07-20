@@ -8,9 +8,11 @@ Email: huy.nguyenngoc2137@gmail.com
 ---
 
 ## 📦 Features
-
-- Robot: Differential drive mobile robot
-- World: Refered Turtlebot 3 world
+- Simulation:
+  - Robot: Differential drive mobile robot
+  - World: Refered Turtlebot 3 world
+- Mapping: Graph-based SLAM of SlamToolbox package
+- Localization: AMCL
 
 ![Gazebo simulation](media/gazebo_2.png)
 
