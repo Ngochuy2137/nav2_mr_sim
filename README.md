@@ -3,13 +3,16 @@
 A minimal ROS 2 simulation package for differential drive robots integrated with Navigation2 (Nav2) and Gazebo.
 
 **Maintainer**: Huynn  
-📧 Email: huy.nguyenngoc2137@gmail.com  
+Email: huy.nguyenngoc2137@gmail.com  
 
 ---
 
 ## 📦 Features
 
-- ...
+- Robot: Differential drive mobile robot
+- World: Refered Turtlebot 3 world
+
+![Gazebo simulation](media/gazebo_2.png)
 
 ---
 
@@ -35,11 +38,30 @@ sudo apt install \
   ros-foxy-control-msgs \
   ros-foxy-hardware-interface \
   ros-foxy-diff-drive-controller
-```
-### 3. Initialize environment
-After colcon build, please run the following sh file to setup environment variables
 
+colcon build
+```
+
+
+
+### 4. Run
+
+#### 4.1 Mapping
 ```bash
 cd <path to nav2_mr_sim>
-source init_setup.sh .
+source init_setup.sh .  # please run the following sh file to setup environment variables
+ros2 launch nav2_mr_sim 1_gazebo.launch.py
+ros2 launch nav2_mr_sim 2_slam.launch.py
 ```
+
+![Gazebo simulation](media/mapping_rviz.png)
+
+
+#### 4.2 Navigation
+```bash
+cd <path to nav2_mr_sim>
+source init_setup.sh .  # please run the following sh file to setup environment variables
+ros2 launch nav2_mr_sim 1_gazebo.launch.py
+ros2 launch nav2_mr_sim 3_nav.launch.py
+```
+
