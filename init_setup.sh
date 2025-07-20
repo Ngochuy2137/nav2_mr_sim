@@ -24,15 +24,15 @@ export NAV2_MR_SIM_DIR
 echo "📦 Initializing package at: $NAV2_MR_SIM_DIR"
 
 # Thêm path vào GAZEBO_MODEL_PATH
-export GAZEBO_MODEL_PATH=$GAZEBO_MODEL_PATH:$NAV2_MR_SIM_DIR/world/models
+export GAZEBO_MODEL_PATH=$GAZEBO_MODEL_PATH:$NAV2_MR_SIM_DIR/worlds/models
 
-# Thêm vào ~/.bashrc nếu chưa có
-if ! grep -q "$NAV2_MR_SIM_DIR/world/models" ~/.bashrc; then
-  echo "export GAZEBO_MODEL_PATH=\$GAZEBO_MODEL_PATH:$NAV2_MR_SIM_DIR/world/models" >> ~/.bashrc
-  echo "✅ GAZEBO_MODEL_PATH added to ~/.bashrc"
-else
-  echo "⚠️  GAZEBO_MODEL_PATH already exists in ~/.bashrc"
-fi
+# # Thêm vào ~/.bashrc nếu chưa có
+# if ! grep -q "$NAV2_MR_SIM_DIR/worlds/models" ~/.bashrc; then
+#   # echo "export GAZEBO_MODEL_PATH=\$GAZEBO_MODEL_PATH:$NAV2_MR_SIM_DIR/world/models" >> ~/.bashrc
+#   echo "✅ GAZEBO_MODEL_PATH added to ~/.bashrc"
+# else
+#   echo "⚠️  GAZEBO_MODEL_PATH already exists in ~/.bashrc"
+# fi
 
 # Source ROS 2 nếu cần
 if [ -d "/opt/ros/foxy" ]; then
