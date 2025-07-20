@@ -25,7 +25,7 @@ Email: huy.nguyenngoc2137@gmail.com
 ```bash
 mkdir -p <your workspace path>/src
 cd <your workspace path>/src
-git clone ...
+git clone https://github.com/Ngochuy2137/nav2_mr_sim.git
 ```
 
 ### 2. Installation
@@ -40,15 +40,18 @@ sudo apt install \
   ros-foxy-control-msgs \
   ros-foxy-hardware-interface \
   ros-foxy-diff-drive-controller
+```
 
+#### 2.2 Build
+```bash
+cd <your workspace path>
 colcon build
 ```
 
 
+### 3. Run
 
-### 4. Run
-
-#### 4.1 Mapping
+#### 3.1 Mapping
 ```bash
 cd <path to nav2_mr_sim>
 source init_setup.sh .  # please run the following sh file to setup environment variables
@@ -59,7 +62,7 @@ ros2 launch nav2_mr_sim 2_slam.launch.py
 ![Gazebo simulation](media/mapping_rviz.png)
 
 
-#### 4.2 Navigation
+#### 3.2 Navigation
 ```bash
 cd <path to nav2_mr_sim>
 source init_setup.sh .  # please run the following sh file to setup environment variables
