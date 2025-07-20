@@ -28,9 +28,9 @@
     </inertial>
     <visual>
         <geometry>  
-            <box size="0.7 0.4 0.2"/> 
+            <box size="0.35 0.2 0.1"/> 
         </geometry>   
-        <origin xyz="0.0 0.0 0.1" rpy="0.0 0.0 0.0"/> 
+        <origin xyz="0.0 0.0 0.05" rpy="0.0 0.0 0.0"/> 
         <material name="green"/>
     </visual>
 </link>
@@ -43,14 +43,14 @@
     </inertial>
     <visual>
         <geometry>
-            <cylinder radius="0.1" length="0.05"/>
+            <cylinder radius="0.05" length="0.05"/>
         </geometry>
         <origin xyz="0.0 0.0 0.0" rpy="1.57 0.0 0.0"/>
         <material name="black"/>     
     </visual>
     <collision>
         <geometry>
-            <cylinder radius="0.1" length="0.05"/>
+            <cylinder radius="0.05" length="0.05"/>
         </geometry>
         <origin xyz="0.0 0.0 0.0" rpy="1.57 0.0 0.0"/>
     </collision>
@@ -64,14 +64,14 @@
     </inertial>
     <visual>
         <geometry>
-            <cylinder radius="0.1" length="0.05"/>
+            <cylinder radius="0.05" length="0.05"/>
         </geometry>
         <origin xyz="0.0 0.0 0.0" rpy="1.57 0.0 0.0"/>
         <material name="black"/>     
     </visual>
     <collision>
         <geometry>
-            <cylinder radius="0.1" length="0.05"/>
+            <cylinder radius="0.05" length="0.05"/>
         </geometry>
         <origin xyz="0.0 0.0 0.0" rpy="1.57 0.0 0.0"/>
     </collision>
@@ -85,14 +85,14 @@
     </inertial>
     <visual>
         <geometry>
-            <sphere radius="0.05"/>
+            <sphere radius="0.025"/>
         </geometry>
         <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
         <material name="black"/>            
     </visual>
     <collision>
         <geometry>
-            <sphere radius="0.05"/>
+            <sphere radius="0.025"/>
         </geometry>
         <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
     </collision>
@@ -110,7 +110,7 @@
     </visual>
   </link>
 
-  <link name="lidar_link">
+  <link name="base_scan">
     <visual>
         <geometry>      
             <cylinder radius="0.1" length="0.05"/>
@@ -140,7 +140,7 @@
 <joint name="imu_joint" type="fixed">
     <parent link="base_link"/>
     <child link="imu_link"/>
-    <origin xyz="0.1 0.1 0.1" rpy="0.0 0.0 0.0"/>
+    <origin xyz="0.05 0.05 0.05" rpy="0.0 0.0 0.0"/>
 </joint>
 
 <joint name="base_joint" type="fixed">
@@ -151,32 +151,31 @@
 
 <joint name="base_lidar_joint" type="fixed">
     <parent link="base_link"/>
-    <child link="lidar_link"/>
-    <origin xyz="0.0 0.0 0.225" rpy="0.0 0.0 0.0"/>
+    <child link="base_scan"/>
+    <origin xyz="0.0 0.0 0.15" rpy="0.0 0.0 0.0"/>
 </joint>
 
 <joint name="left_wheel_joint" type="continuous">
     <parent link="base_link"/>
     <child link="left_wheel"/>
-    <origin xyz="-0.175 0.225 0.0" rpy="0 0.0 0.0"/>  
+    <origin xyz="-0.0875 0.125 0.025" rpy="0 0.0 0.0"/>  
     <axis xyz="0.0 1.0 0.0"/>
-    <dynamics damping="0.2" friction="1.0"/>
+    <dynamics damping="0.2" friction="0.2"/>
     <limit effort="100" velocity="1.0"/>
 </joint>
 <joint name="right_wheel_joint" type="continuous">
     <parent link="base_link"/>
     <child link="right_wheel"/>
-    <origin xyz="-0.175 -0.225 0.0" rpy="0 0.0 0.0"/>  
+    <origin xyz="-0.0875 -0.125 0.025" rpy="0 0.0 0.0"/>  
     <axis xyz="0.0 1.0 0.0"/>
-    <dynamics damping="0.2" friction="1.0"/>
+    <dynamics damping="0.2" friction="0.2"/>
     <limit effort="100" velocity="1.0"/>
 </joint>
 
 <joint name="caster_wheel_joint" type="fixed">
     <parent link="base_link"/>
     <child link="caster_wheel"/>
-    <dynamics damping="0.2" friction="0.1"/>
-    <origin xyz="0.2 0.0 -0.05" rpy="0.0 0.0 0.0"/>
+    <origin xyz="0.125 0.0 0.0" rpy="0.0 0.0 0.0"/>
 </joint>
 
 
@@ -215,11 +214,11 @@
     </sensor>
 </gazebo>
 
-  <gazebo reference="lidar_link">
+  <gazebo reference="base_scan">
     <sensor name="laser" type="ray">
         <pose> 0 0 0 0 0 0 </pose>
         <visualize>true</visualize>
-        <update_rate>10</update_rate>
+        <update_rate>100</update_rate>
         <ray>
             <scan>
                 <horizontal>
@@ -238,7 +237,7 @@
                 <argument>~/out:=scan</argument>
             </ros>
             <output_type>sensor_msgs/LaserScan</output_type>
-            <frame_name>lidar_link</frame_name>
+            <frame_name>base_scan</frame_name>
         </plugin>
     </sensor>
 </gazebo>
@@ -253,8 +252,8 @@
         <update_rate>30</update_rate>
         <joint_name>left_wheel_joint</joint_name>
         <joint_name>right_wheel_joint</joint_name>
-      </plugin>
-    </gazebo>
+    </plugin>
+</gazebo>
 
 <gazebo reference="base_link">
     <material>Gazebo/Green</material>
