@@ -53,4 +53,9 @@ install(TARGETS
   vel_publisher
   DESTINATION lib/${PROJECT_NAME})
 
+install(
+  DIRECTORY worlds/
+  DESTINATION share/${PROJECT_NAME}/worlds
+)
+
 ament_package()
